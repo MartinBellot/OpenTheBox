@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class GiftForm extends StatefulWidget {
   const GiftForm({Key? key}) : super(key: key);
@@ -88,9 +89,19 @@ class _GiftFormState extends State<GiftForm> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Enregistrer les informations du cadeau
-                // Utiliser _titleController.text, _descriptionController.text, _images, _selectedMusic pour cela
-                // Par exemple : Gift(title: _titleController.text, description: _descriptionController.text, images: _images, music: _selectedMusic)
+                // Create a Gift object
+                var gift = Gift(
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  images: _images,
+                  music: _selectedMusic,
+                );
+
+                // Convert the Gift to a JSON string
+                var json = gift.toJson();
+
+                // TODO: Save the JSON string to a file
+                print(json);
               },
               child: const Text('Créer le cadeau'),
             ),
@@ -114,4 +125,17 @@ class Gift {
     required this.images,
     this.music,
   });
+
+  // Convert a Gift to a Map
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'images': images,
+      'music': music,
+    };
+  }
+
+  // Convert a Gift to a JSON string
+  String toJson() => jsonEncode(toMap());
 }
