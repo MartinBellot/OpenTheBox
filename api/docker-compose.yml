@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  db:
+    image: postgres:15
+    shm_size: 1g
+    container_name: openTheBoxDb
+    restart: on-failure
+    command: postgres -c listen_addresses='*'
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - openTheBox:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    environment:
+      POSTGRES_USER: openTheBoxUser
+      POSTGRES_PASSWORD: openTheBoxPassword
+      POSTGRES_DB: openTheBox
+      POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - openTheBox_network
+
+volumes:
+  openTheBox:
+
+
+networks:
+  openTheBox_network:
+    driver: bridge
