@@ -1,0 +1,8 @@
+{
+    "id": "1",
+    "gift_name": "Gift 1",
+    "gift_description": "Gift 1 Description",
+    "gift_music": "path_to_music_file",
+    "gift_image": "path_to_image_file",
+    "gift_content": "Gift 1 Content"
+}
