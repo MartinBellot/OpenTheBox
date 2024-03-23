@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorOpenTheBox {
   static const Color main = Colors.blue;
-  static const Color secondary = Colors.blueAccent;
+  static const Color secondary = Color(0xFFADD8E6);
   static const Color background = Colors.white;
   static const Color text = Colors.black;
   static const Color textSecondary = Colors.grey;
@@ -17,6 +17,7 @@ class ThemeOpenTheBox {
     colorScheme: ColorScheme.fromSwatch().copyWith(
       primary: ColorOpenTheBox.main,
       secondary: ColorOpenTheBox.secondary,
+      background: ColorOpenTheBox.background,
     ),
   );
 }
