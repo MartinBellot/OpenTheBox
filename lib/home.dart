@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:openthebox/customSizedBox.dart';
-import 'package:openthebox/giftForm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'gifts/sendGiftPage.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const GiftForm()),
+                            MaterialPageRoute(builder: (context) => SendGiftPage()),
                           );
                         },
                         icon: const Icon(Icons.send),

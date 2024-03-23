@@ -3,3 +3,6 @@
 build/
 node_modules/
 .idea/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
