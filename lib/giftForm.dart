@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:typed_data';
 
 class GiftForm extends StatefulWidget {
   const GiftForm({Key? key}) : super(key: key);
@@ -11,18 +12,8 @@ class GiftForm extends StatefulWidget {
 class _GiftFormState extends State<GiftForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _imageController = TextEditingController();
-  final TextEditingController _musicController = TextEditingController();
-
-  List<String> _images = [];
+  final List<String> _images = [];
   String? _selectedMusic;
-
-  void _addImage() {
-    setState(() {
-      _images.add(_imageController.text);
-      _imageController.clear();
-    });
-  }
 
   void _selectMusic(String? value) {
     setState(() {
@@ -34,7 +25,7 @@ class _GiftFormState extends State<GiftForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadeau Creator'),
+        title: const Text('Créé ton cadeau'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -52,23 +43,9 @@ class _GiftFormState extends State<GiftForm> {
               maxLines: null,
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _imageController,
-              decoration: const InputDecoration(labelText: 'URL de l\'image'),
-            ),
             ElevatedButton(
-              onPressed: _addImage,
-              child: const Text('Ajouter une image'),
-            ),
-            const SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: _images.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(_images[index]),
-                );
-              },
+              onPressed: () async {print("test");},
+              child: const Text('Ajouter des images'),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -111,6 +88,9 @@ class _GiftFormState extends State<GiftForm> {
     );
   }
 }
+
+
+
 
 // Modèle de données pour le cadeau
 class Gift {
