@@ -31,14 +31,13 @@ class _GiftPageState extends State<GiftPage> {
     await _playMusic();
   }
 
-
   Future<void> _playMusic() async {
-  var audioSource = AudioSource.uri(
-    Uri.parse('asset:///assets/music.mp3'),
-  );
-  await _audioPlayer.setAudioSource(audioSource);
-  _audioPlayer.play();
-}
+    var audioSource = AudioSource.uri(
+      Uri.parse('asset:///music.mp3'),
+    );
+    await _audioPlayer.setAudioSource(audioSource);
+    _audioPlayer.play();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class _GiftPageState extends State<GiftPage> {
             child: _giftOpened
                 ? const CardWidget()
                 : const Image(
-                    image: AssetImage('assets/gift.png'),
+                    image: AssetImage('gift.png'),
                     height: 200,
                     width: 200,
                   ),
@@ -98,9 +97,9 @@ class CardWidget extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 32),
-            Image.asset('assets/image1.jpg', height: 100, width: 100),
+            Image.asset('image1.jpg', height: 100, width: 100),
             const SizedBox(height: 8),
-            Image.asset('assets/image2.jpg', height: 100, width: 100),
+            Image.asset('image2.jpg', height: 100, width: 100),
             const SizedBox(height: 8),
             // Ajoutez d'autres images ou vidéos ici
           ],

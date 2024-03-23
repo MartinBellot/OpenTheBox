@@ -16,14 +16,14 @@ class _LoginState extends State<Login> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                SizedBox(
+                /*SizedBox(
                   width: 180,
                   height: 60,
                   child: Image.asset(
                     'assets/logo.png',
                     fit: BoxFit.cover,
                   ),
-                ),
+                ),*/
                 const Spacer(),
                 ElevatedButton(
                   onPressed: null,
