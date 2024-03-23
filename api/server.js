@@ -53,6 +53,22 @@ app.post('/signin', async (req, res) => {
     }
 });
 
+app.get('/users/:userId/friends', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT USERS.id, USERS.name 
+            FROM friends 
+            INNER JOIN USERS ON friends.id_friend = USERS.id 
+            WHERE friends.id_user = $1
+        `, [userId]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     console.log('Server is running on port ', process.env.PORT);
 });

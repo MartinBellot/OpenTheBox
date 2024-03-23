@@ -13,3 +13,9 @@ CREATE TABLE gift (
     video VARCHAR(100),
     music VARCHAR(100)
 );
+
+CREATE TABLE friends (
+  id SERIAL PRIMARY KEY,
+  id_user INTEGER,
+  id_friend INTEGER
+);

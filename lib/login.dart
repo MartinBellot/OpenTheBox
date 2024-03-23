@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:openthebox/customSizedBox.dart';
 import 'package:openthebox/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -171,6 +172,7 @@ class _SignInState extends State<SignIn> {
                                 data: {'name': emailController.text, 'password': passwordController.text});
                             Navigator.pop(context);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+                            await saveUserName(response.data['name'], response.data['id']);
                           } catch (e) {
                             if (e is DioError) {
                               print('Message: ${e.message}');
@@ -194,4 +196,11 @@ class _SignInState extends State<SignIn> {
           ),
         ),
       );
+
+  Future<void> saveUserName(String userName, int userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    print('saveUserName $userName $userId');
+    await prefs.setString('username', userName);
+    await prefs.setInt('userId', userId);
+  }
 }

@@ -33,6 +33,7 @@ dependencies:
   audioplayers: ^6.0.0
   just_audio: ^0.9.17
   dio: ^4.0.0
+  shared_preferences: ^2.0.6
 
 
   # The following adds the Cupertino Icons font to your application.
