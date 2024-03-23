@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:openthebox/giftPage.dart';
 import 'package:openthebox/giftForm.dart';
+import 'package:openthebox/login.dart';
+import 'package:openthebox/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,11 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OpenTheBox',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: ThemeOpenTheBox.lightTheme,
       home: const MyHomePage(title: 'OpenTheBox'),
     );
   }
@@ -34,7 +32,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void _navigateToGiftPage() {
     Navigator.push(
       context,
@@ -50,26 +47,5 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: _navigateToGiftPage,
-              child: Text('Aller à la page cadeau (ouverture de boîte)'),
-            ),
-            ElevatedButton(
-              onPressed: _navigateToGiftCreationPage,
-              child: Text('Aller à la page cadeau (création de boîte)'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Login();
 }
