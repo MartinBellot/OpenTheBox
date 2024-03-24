@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:particles_flutter/particles_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GiftPage extends StatefulWidget {
   const GiftPage({Key? key}) : super(key: key);
@@ -16,16 +17,18 @@ class _GiftPageState extends State<GiftPage> {
   late AudioPlayer _audioPlayer;
   late IO.Socket socket;
   late Map<String, dynamic> giftData;
+  String? username = '';
 
   @override
   void initState() {
     super.initState();
+    getUsername();
     _audioPlayer = AudioPlayer();
     socket = IO.io('http://localhost:5000', <String, dynamic>{
       'transports': ['websocket'],
     });
     socket.onConnect((_) {
-      print('Connected to socket server');
+      print('Connected to socket server, username: $username');
     });
     socket.on('open_gift', (_) => _openGift());
     socket.on('receive_gift', (data) => _receiveGift(data));
@@ -39,11 +42,31 @@ class _GiftPageState extends State<GiftPage> {
     super.dispose();
   }
 
-  void _receiveGift(data) {
+
+  void getUsername() async {
+    print(this);  // Add this line
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        username = prefs.getString('username');
+      });
+    }
+  }
+
+  void _receiveGift(data) async {
     if (data != null && mounted) {
+      print("Received gift from ${data['gift_from']}, current_user: $username") ;
+      print("Image before parse: ${data['image']}");
+      if (data['gift_to'] != username) return;
+
+      var imageUrl = 'http://localhost:8090/download/${data['image']}';
+      var musicUrl = 'http://localhost:8090/download/${data['musique']}';
+
       setState(() {
         _giftReceived = true;
         giftData = data;
+        giftData['image'] = imageUrl;
+        giftData['musique'] = musicUrl;
       });
     }
   }
@@ -53,12 +76,12 @@ class _GiftPageState extends State<GiftPage> {
     setState(() {
       _giftOpened = true;
     });
-    await _playMusic();
+    await _playMusic(giftData['musique']);
   }
 
-  Future<void> _playMusic() async {
+  Future<void> _playMusic(String musicUrl) async {
     var audioSource = AudioSource.uri(
-      Uri.parse('asset:///music.mp3'),
+      Uri.parse(musicUrl),
     );
     await _audioPlayer.setAudioSource(audioSource);
     _audioPlayer.play();
@@ -68,7 +91,7 @@ class _GiftPageState extends State<GiftPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadeau App'),
+        title: const Text('Recevoir un cadeau'),
       ),
       body: Center(
         child: _giftReceived ? Stack(
@@ -131,6 +154,8 @@ class _GiftPageState extends State<GiftPage> {
   }
 }
 
+
+
 class CardWidget extends StatelessWidget {
   final Map<String, dynamic> giftData;
 
@@ -146,18 +171,40 @@ class CardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              giftData['titre'],
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Transform.translate(
+              offset: Offset(0, -10),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    giftData['titre'],
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 16),
-            Text(
-              giftData['description'],
-              style: const TextStyle(fontSize: 16),
+            Transform.translate(
+              offset: Offset(10, 0),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    giftData['description'],
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 32),
-            for (var image in giftData['images'])
-              Image.asset(image, height: 100, width: 100),
+            Transform.rotate(
+              angle: -0.1,
+              child: Card(
+                child: giftData['image'] != null
+                    ? Image.network(giftData['image'])
+                    : Container(),  // Replace with a placeholder widget if you like
+              ),
+            ),
             const SizedBox(height: 8),
             // Ajoutez d'autres images ou vidéos ici
           ],

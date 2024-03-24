@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class SendGiftPage extends StatefulWidget {
   final int from;
@@ -44,8 +47,10 @@ class _SendGiftPageState extends State<SendGiftPage> {
       socket.emit('receive_gift', {
         'titre': title,
         'description': description,
-        'images': images.split(','),
+        'image': images,
         'musique': music,
+        'gift_from': from,
+        'gift_to': to
       });
       try {
         await Dio().post('http://0.0.0.0:8090/gifts', data: {
@@ -70,6 +75,61 @@ class _SendGiftPageState extends State<SendGiftPage> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        images = pickedFile.path;
+      });
+
+      // Read the file as bytes
+      var bytes = await pickedFile.readAsBytes();
+
+      // Create a MultipartRequest
+      var request = http.MultipartRequest('POST', Uri.parse("http://0.0.0.0:8090/upload"));
+
+      // Get the file name
+      var fileName = pickedFile.name;
+
+      images = fileName;
+
+      // Add the file to the request
+      request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: fileName, contentType: MediaType('image', 'jpeg')));
+
+      // Send the request
+      try {
+        var response = await request.send();
+        print("File upload response: ${response.statusCode}");
+      } catch (e) {
+        print("File upload error: $e");
+      }
+    }
+  }
+
+  Future<void> _pickMusic() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        music = pickedFile.path;
+      });
+
+      var bytes = await pickedFile.readAsBytes();
+      var request = http.MultipartRequest('POST', Uri.parse("http://0.0.0.0:8090/upload"));
+      var fileName = pickedFile.name;
+      music = fileName;
+      request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: fileName, contentType: MediaType('audio', 'mpeg')));
+      try {
+        var response = await request.send();
+        print("File upload response: ${response.statusCode}");
+      } catch (e) {
+        print("File upload error: $e");
+      }
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,15 +152,19 @@ class _SendGiftPageState extends State<SendGiftPage> {
                 onSaved: (value) => description = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter a description' : null,
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Images (comma separated)'),
-                onSaved: (value) => images = value!,
-                validator: (value) => value!.isEmpty ? 'Please enter at least one image' : null,
+              InkWell(
+                onTap: _pickImage,
+                child: InputDecorator(
+                  decoration: const InputDecoration(labelText: 'Image'),
+                  child: Text(images.isEmpty ? 'No image selected.' : images),
+                ),
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Music'),
-                onSaved: (value) => music = value!,
-                validator: (value) => value!.isEmpty ? 'Please enter a music file' : null,
+              InkWell(
+                onTap: _pickMusic,
+                child: InputDecorator(
+                  decoration: const InputDecoration(labelText: 'Musique'),
+                  child: Text(music.isEmpty ? 'No music selected.' : music),
+                ),
               ),
               ElevatedButton(
                 onPressed: _sendGift,

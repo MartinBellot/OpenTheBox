@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:openthebox/customSizedBox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'gifts/sendGiftPage.dart';
+import 'gifts/giftPage.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -24,6 +25,13 @@ class _HomeState extends State<Home> {
     getFrom();
   }
 
+  void navigateToReceiveGift() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const GiftPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Padding(
@@ -31,6 +39,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               Text('Bonjour $username'),
+              ElevatedButton(onPressed: navigateToReceiveGift, child: const Text('Recevoir un cadeau')),
               const H(20),
               const Text('Vos amis'),
               if (friends != null)

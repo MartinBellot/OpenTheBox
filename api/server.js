@@ -8,6 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const multer = require('multer');
+  
+const upload = multer({ storage: multer.memoryStorage()})
+
 const pool = new Pool({
     host: 'localhost',
     port: 5432,
@@ -80,6 +84,56 @@ app.get('/users/:userId', async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
+});
+
+const fs = require('fs');
+const path = require('path');
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    try {
+        console.log("try to upload file...");
+        if (!req.file) {
+            console.log("No file attached");
+            return res.status(400).json({ message: "No file attached" });
+        }
+
+        // req.file is the `file` file
+        // req.file.buffer is a Buffer of the entire file
+        const file = req.file.buffer; // This is your file as binary data
+        console.log('got file: ', file);
+
+        // Define the path where the file should be saved
+        const savePath = path.join(__dirname, 'upload', req.file.originalname);
+
+        // Write the file
+        fs.writeFile(savePath, file, (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Error saving file" });
+            }
+
+            return res.status(201).json({ message: "File uploaded successfully" });
+        });
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+
+app.get('/download/:filename', (req, res) => {
+    // Extract the filename from the request parameters
+    const { filename } = req.params;
+
+    // Define the path of the file to be downloaded
+    const filePath = path.join(__dirname, 'upload', filename);
+
+    // Send the file for download
+    res.download(filePath, (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ message: "Error downloading file" });
+        }
+    });
 });
 
 app.listen(process.env.PORT, () => {

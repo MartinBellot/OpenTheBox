@@ -14,6 +14,7 @@ def open_gift():
 
 @socketio.on('receive_gift')
 def receive_gift(json):
+    print('received gift: ' + str(json))
     socketio.emit('receive_gift', json)
 
 if __name__ == '__main__':
