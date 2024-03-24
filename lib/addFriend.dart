@@ -3,12 +3,23 @@ import 'package:openthebox/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddFriendPage extends StatefulWidget {
+  final String? friend;
+  const AddFriendPage({Key? key, this.friend}) : super(key: key);
   @override
   _AddFriendPageState createState() => _AddFriendPageState();
 }
 
 class _AddFriendPageState extends State<AddFriendPage> {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.friend != null) {
+      _controller.text = widget.friend!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

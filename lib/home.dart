@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String? username;
   List<Friends>? friends;
+  List<Friends>? suggestions;
   late int from;
 
   @override
@@ -23,6 +24,7 @@ class _HomeState extends State<Home> {
     super.initState();
     getUsername();
     getFriends();
+    getSuggestions();
     getFrom();
   }
 
@@ -55,6 +57,8 @@ class _HomeState extends State<Home> {
                     onPressed: () => setState(() {
                       friends = null;
                       getFriends();
+                      suggestions = null;
+                      getSuggestions();
                     }),
                     icon: const Icon(
                       Icons.refresh,
@@ -80,6 +84,28 @@ class _HomeState extends State<Home> {
                           );
                         },
                         icon: const Icon(Icons.send),
+                      ),
+                    ],
+                  ),
+                ),
+              const H(10),
+              const Text('Suggestions:'),
+              if (suggestions != null)
+                ...suggestions!.map(
+                  (friend) => Row(
+                    children: [
+                      const Icon(Icons.person),
+                      const W(10),
+                      Text(friend.name),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddFriendPage(friend: friend.name)),
+                          );
+                        },
+                        icon: const Icon(Icons.add),
                       ),
                     ],
                   ),
@@ -114,6 +140,18 @@ class _HomeState extends State<Home> {
     if (userId != null) {
       setState(() {
         from = userId;
+      });
+    }
+  }
+
+  void getSuggestions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('userId');
+    if (userId != null) {
+      final Api api = await Api.getInstance();
+      final response = await api.get('/users/$userId/suggestions');
+      setState(() {
+        suggestions = (response.data as List).map((data) => Friends(id: data['id'], name: data['name'])).toList();
       });
     }
   }

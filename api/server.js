@@ -109,6 +109,25 @@ app.get('/users/name/:userName', async (req, res) => {
     }
 });
 
+app.get('/users/:userId/suggestions', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT id, name 
+            FROM USERS 
+            WHERE id NOT IN (
+                SELECT id_friend 
+                FROM friends 
+                WHERE id_user = $1
+            ) AND id != $1
+        `, [userId]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     console.log('Server is running on port ', process.env.PORT);
 });
