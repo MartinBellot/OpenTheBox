@@ -28,9 +28,9 @@ app.post('/users', async (req, res) => {
 });
 
 app.post('/gifts', async (req, res) => {
-    const { name, description, text, image, video, music } = req.body;
+    const { name, description, text, image, video, music, gift_from, gift_to } = req.body;
     try {
-        const result = await pool.query('INSERT INTO gift (name, description, text, image, video, music) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [name, description, text, image, video, music]);
+        const result = await pool.query('INSERT INTO gift (name, description, text, image, video, music, gift_from, gift_to) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *', [name, description, text, image, video, music, gift_from, gift_to]);
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
@@ -63,6 +63,19 @@ app.get('/users/:userId/friends', async (req, res) => {
             WHERE friends.id_user = $1
         `, [userId]);
         res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/users/:userId', async (req, res) => {
+    console.log('DO CALL');
+    const { userId } = req.params;
+    try {
+        const result = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
+        console.log('result', result.rows[0]);
+        res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });

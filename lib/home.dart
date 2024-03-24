@@ -14,12 +14,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String? username;
   List<Friends>? friends;
+  late int from;
 
   @override
   void initState() {
     super.initState();
-    getUserame();
+    getUsername();
     getFriends();
+    getFrom();
   }
 
   @override
@@ -43,7 +45,7 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SendGiftPage()),
+                            MaterialPageRoute(builder: (context) => SendGiftPage(from: from, to: friend.id)),
                           );
                         },
                         icon: const Icon(Icons.send),
@@ -56,7 +58,7 @@ class _HomeState extends State<Home> {
         ),
       );
 
-  void getUserame() async {
+  void getUsername() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString('username');
@@ -70,6 +72,16 @@ class _HomeState extends State<Home> {
       final response = await Dio().get('http://0.0.0.0:8090/users/$userId/friends');
       setState(() {
         friends = (response.data as List).map((data) => Friends(id: data['id'], name: data['name'])).toList();
+      });
+    }
+  }
+
+  void getFrom() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('userId');
+    if (userId != null) {
+      setState(() {
+        from = userId;
       });
     }
   }

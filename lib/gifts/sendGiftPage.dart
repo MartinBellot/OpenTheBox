@@ -1,7 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SendGiftPage extends StatefulWidget {
+  final int from;
+  final int to;
+
+  const SendGiftPage({Key? key, required this.from, required this.to}) : super(key: key);
+
   @override
   _SendGiftPageState createState() => _SendGiftPageState();
 }
@@ -29,7 +35,10 @@ class _SendGiftPageState extends State<SendGiftPage> {
     super.dispose();
   }
 
-  void _sendGift() {
+  void _sendGift() async {
+    String? from = await Dio().get('http://0.0.0.0:8090/users/${widget.from}').then((value) => value.data['name']);
+    String? to = await Dio().get('http://0.0.0.0:8090/users/${widget.to}').then((value) => value.data['name']);
+
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       socket.emit('receive_gift', {
@@ -38,6 +47,26 @@ class _SendGiftPageState extends State<SendGiftPage> {
         'images': images.split(','),
         'musique': music,
       });
+      try {
+        await Dio().post('http://0.0.0.0:8090/gifts', data: {
+          'name': title,
+          'description': description,
+          'images': images,
+          'music': music,
+          'from': widget.from,
+          'to': widget.to
+        });
+        Navigator.pop(context);
+      } catch (e) {
+        if (e is DioError) {
+          print('Message: ${e.message}');
+          print('Response data: ${e.response?.data}');
+          print('Response headers: ${e.response?.headers}');
+          Navigator.pop(context);
+        } else {
+          print(e);
+        }
+      }
     }
   }
 

@@ -11,7 +11,9 @@ CREATE TABLE gift (
     text VARCHAR(100),
     image VARCHAR(100),
     video VARCHAR(100),
-    music VARCHAR(100)
+    music VARCHAR(100),
+    gift_from INTEGER,
+    gift_to INTEGER,
 );
 
 CREATE TABLE friends (

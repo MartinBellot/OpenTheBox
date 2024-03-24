@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:openthebox/gifts/giftPage.dart';
-import 'package:openthebox/gifts/sendGiftPage.dart';
 import 'package:openthebox/login.dart';
 import 'package:openthebox/theme.dart';
 
@@ -32,41 +30,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _navigateToGiftPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const GiftPage()),
-    );
-  }
-
-  void _navigateToGiftCreationPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SendGiftPage()),
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: _navigateToGiftPage,
-              child: const Text('Go to Gift Page'),
-            ),
-            ElevatedButton(
-              onPressed: _navigateToGiftCreationPage,
-              child: const Text('Go to Gift Creation Page'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => const Login();
 }
