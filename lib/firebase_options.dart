@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDePuTks7GxM9tf6X_ZIyBJiN-BdcXLUcA',
+    appId: '1:789723547159:web:b922656cc755f5d70bfe52',
+    messagingSenderId: '789723547159',
+    projectId: 'openthebox-88085',
+    authDomain: 'openthebox-88085.firebaseapp.com',
+    storageBucket: 'openthebox-88085.appspot.com',
+    measurementId: 'G-4W68FRESK2',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAQMcqCVoc-p17ANO07B_UrM4Rm38p9Q9A',
     appId: '1:789723547159:android:c1f3c99dbe1a312c0bfe52',
@@ -64,5 +68,14 @@ class DefaultFirebaseOptions {
     projectId: 'openthebox-88085',
     storageBucket: 'openthebox-88085.appspot.com',
     iosBundleId: 'com.example.openthebox',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAjeoUiw1CULgczmmkcSSNnEU7ipIbpxlE',
+    appId: '1:789723547159:ios:e32fe9401aaaf48b0bfe52',
+    messagingSenderId: '789723547159',
+    projectId: 'openthebox-88085',
+    storageBucket: 'openthebox-88085.appspot.com',
+    iosBundleId: 'com.example.openthebox.RunnerTests',
   );
 }

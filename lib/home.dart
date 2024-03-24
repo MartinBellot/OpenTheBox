@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:openthebox/customSizedBox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'gifts/sendGiftPage.dart';
+import 'firebase_api.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class _HomeState extends State<Home> {
     getUsername();
     getFriends();
     getFrom();
+    FirebaseApi().initNotifications();
   }
 
   @override
