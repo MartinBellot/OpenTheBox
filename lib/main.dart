@@ -64,6 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: _navigateToGiftCreationPage,
               child: const Text('Go to Gift Creation Page'),
             ),
+            /*
+            ElevatedButton(
+              onPressed: _navigateToAddFriendPage,
+              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+              child: const Text("Add", style: TextStyle(color: Colors.white)),
+            ),
+            */
           ],
         ),
       ),
