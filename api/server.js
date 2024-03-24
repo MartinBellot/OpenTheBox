@@ -73,6 +73,18 @@ app.get('/users/:userId/friends', async (req, res) => {
     }
 });
 
+app.post('/users/:userId/add/friends', async (req, res) => {
+    const { userId } = req.params;
+    const { friendId } = req.body;
+    try {
+        const result = await pool.query('INSERT INTO friends (id_user, id_friend) VALUES ($1, $2) RETURNING *', [userId, friendId]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.get('/users/:userId', async (req, res) => {
     console.log('DO CALL');
     const { userId } = req.params;
@@ -119,7 +131,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
     }
 });
 
-
 app.get('/download/:filename', (req, res) => {
     // Extract the filename from the request parameters
     const { filename } = req.params;
@@ -134,6 +145,40 @@ app.get('/download/:filename', (req, res) => {
             res.status(500).json({ message: "Error downloading file" });
         }
     });
+});
+
+app.get('/users/name/:userName', async (req, res) => {
+    const { userName } = req.params;
+    try {
+        const result = await pool.query('SELECT id FROM users WHERE name = $1', [userName]);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/users/:userId/suggestions', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT id, name 
+            FROM USERS 
+            WHERE id NOT IN (
+                SELECT id_friend 
+                FROM friends 
+                WHERE id_user = $1
+            ) AND id != $1
+        `, [userId]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 app.listen(process.env.PORT, () => {

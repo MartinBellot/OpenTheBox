@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:openthebox/api.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -39,8 +40,9 @@ class _SendGiftPageState extends State<SendGiftPage> {
   }
 
   void _sendGift() async {
-    String? from = await Dio().get('http://0.0.0.0:8090/users/${widget.from}').then((value) => value.data['name']);
-    String? to = await Dio().get('http://0.0.0.0:8090/users/${widget.to}').then((value) => value.data['name']);
+    Api api = await Api.getInstance();
+    String? from = await api.get('/users/${widget.from}').then((value) => value.data['name']);
+    String? to = await api.get('/users/${widget.to}').then((value) => value.data['name']);
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -53,7 +55,7 @@ class _SendGiftPageState extends State<SendGiftPage> {
         'gift_to': to
       });
       try {
-        await Dio().post('http://0.0.0.0:8090/gifts', data: {
+        await api.post('/gifts', data: {
           'name': title,
           'description': description,
           'images': images,
