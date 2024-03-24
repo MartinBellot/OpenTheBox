@@ -53,8 +53,8 @@ class _SendGiftPageState extends State<SendGiftPage> {
           'description': description,
           'images': images,
           'music': music,
-          'from': widget.from,
-          'to': widget.to
+          'gift_from': widget.from,
+          'gift_to': widget.to
         });
         Navigator.pop(context);
       } catch (e) {
