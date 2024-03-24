@@ -3,9 +3,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Api {
   static late final Api _instance;
+  static bool init = false;
   static Future<Api> getInstance() async {
+    if (init) return _instance;
     await dotenv.load();
     _instance = Api._internal();
+    init = true;
     return _instance;
   }
 

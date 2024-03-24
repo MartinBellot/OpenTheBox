@@ -47,6 +47,21 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+              const H(10),
+              Row(
+                children: [
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () => setState(() {
+                      friends = null;
+                      getFriends();
+                    }),
+                    icon: const Icon(
+                      Icons.refresh,
+                    ),
+                  ),
+                ],
+              ),
               const H(20),
               const Text('Vos amis'),
               if (friends != null)
@@ -86,7 +101,7 @@ class _HomeState extends State<Home> {
     final userId = prefs.getInt('userId');
     if (userId != null) {
       final Api api = await Api.getInstance();
-      final response = await api.get('http://0.0.0.0:8090/users/$userId/friends');
+      final response = await api.get('/users/$userId/friends');
       setState(() {
         friends = (response.data as List).map((data) => Friends(id: data['id'], name: data['name'])).toList();
       });

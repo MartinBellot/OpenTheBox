@@ -69,6 +69,18 @@ app.get('/users/:userId/friends', async (req, res) => {
     }
 });
 
+app.post('/users/:userId/add/friends', async (req, res) => {
+    const { userId } = req.params;
+    const { friendId } = req.body;
+    try {
+        const result = await pool.query('INSERT INTO friends (id_user, id_friend) VALUES ($1, $2) RETURNING *', [userId, friendId]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.get('/users/:userId', async (req, res) => {
     console.log('DO CALL');
     const { userId } = req.params;
@@ -76,6 +88,21 @@ app.get('/users/:userId', async (req, res) => {
         const result = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
         console.log('result', result.rows[0]);
         res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/users/name/:userName', async (req, res) => {
+    const { userName } = req.params;
+    try {
+        const result = await pool.query('SELECT id FROM users WHERE name = $1', [userName]);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });

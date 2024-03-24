@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
                 const Spacer(),
                 Center(
                   child: Image.asset(
-                    'assets/logo.png',
+                    'assets/logo_2.png',
                     width: 250,
                   ),
                 ),
@@ -102,7 +102,7 @@ class _RegisterState extends State<Register> {
                         onPressed: () async {
                           try {
                             final Api api = await Api.getInstance();
-                            await api.post('http://0.0.0.0:8090/users',
+                            await api.post('/users',
                                 data: {'name': emailController.text, 'password': passwordController.text});
                           } catch (e) {
                             if (e is DioError) {
@@ -171,7 +171,7 @@ class _SignInState extends State<SignIn> {
                           print('do call api');
                           try {
                             final Api api = await Api.getInstance();
-                            final response = await api.post('http://0.0.0.0:8090/signin',
+                            final response = await api.post('/signin',
                                 data: {'name': emailController.text, 'password': passwordController.text});
                             Navigator.pop(context);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
