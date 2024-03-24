@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:openthebox/api.dart';
 import 'package:openthebox/customSizedBox.dart';
 import 'package:openthebox/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,7 +101,8 @@ class _RegisterState extends State<Register> {
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
-                            await Dio().post('http://0.0.0.0:8090/users',
+                            final Api api = await Api.getInstance();
+                            await api.post('http://0.0.0.0:8090/users',
                                 data: {'name': emailController.text, 'password': passwordController.text});
                           } catch (e) {
                             if (e is DioError) {
@@ -168,7 +170,8 @@ class _SignInState extends State<SignIn> {
                         onPressed: () async {
                           print('do call api');
                           try {
-                            final response = await Dio().post('http://0.0.0.0:8090/signin',
+                            final Api api = await Api.getInstance();
+                            final response = await api.post('http://0.0.0.0:8090/signin',
                                 data: {'name': emailController.text, 'password': passwordController.text});
                             Navigator.pop(context);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));

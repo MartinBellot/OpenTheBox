@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-/*class AddFriendPage extends StatefulWidget {
+class AddFriendPage extends StatefulWidget {
   @override
   _AddFriendPageState createState() => _AddFriendPageState();
 }
 
 class _AddFriendPageState extends State<AddFriendPage> {
+  String title = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,13 +25,13 @@ class _AddFriendPageState extends State<AddFriendPage> {
                 validator: (value) => value!.isEmpty ? 'Entrez le pseudo de l\'ami' : null,
               ),
               ElevatedButton(
-                onPressed: _sendGift,
+                onPressed: null,
                 child: const Text('Ajouter'),
-              ), 
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}*/
+}

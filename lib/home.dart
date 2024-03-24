@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:openthebox/addFriend.dart';
+import 'package:openthebox/api.dart';
 import 'package:openthebox/customSizedBox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'gifts/sendGiftPage.dart';
@@ -30,7 +32,21 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              Text('Bonjour $username'),
+              Row(
+                children: [
+                  Text('Bonjour $username'),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddFriendPage()),
+                      );
+                    },
+                    icon: const Icon(Icons.person_add),
+                  ),
+                ],
+              ),
               const H(20),
               const Text('Vos amis'),
               if (friends != null)
@@ -69,7 +85,8 @@ class _HomeState extends State<Home> {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getInt('userId');
     if (userId != null) {
-      final response = await Dio().get('http://0.0.0.0:8090/users/$userId/friends');
+      final Api api = await Api.getInstance();
+      final response = await api.get('http://0.0.0.0:8090/users/$userId/friends');
       setState(() {
         friends = (response.data as List).map((data) => Friends(id: data['id'], name: data['name'])).toList();
       });
