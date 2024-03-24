@@ -6,7 +6,7 @@ class Api {
   static bool init = false;
   static Future<Api> getInstance() async {
     if (init) return _instance;
-    await dotenv.load();
+    await dotenv.load(fileName: "assets/.env");
     _instance = Api._internal();
     init = true;
     return _instance;
@@ -18,6 +18,7 @@ class Api {
 
   Api._internal() {
     _dio = Dio();
+    print('use dotenv');
     _apiAdress = dotenv.env['API_ADRESS']!;
     print('api: $_apiAdress');
   }
