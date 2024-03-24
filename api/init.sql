@@ -13,7 +13,7 @@ CREATE TABLE gift (
     video VARCHAR(100),
     music VARCHAR(100),
     gift_from INTEGER,
-    gift_to INTEGER,
+    gift_to INTEGER
 );
 
 CREATE TABLE friends (
