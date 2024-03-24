@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:openthebox/firebase_api.dart';
+import 'package:openthebox/gifts/giftPage.dart';
+import 'package:openthebox/gifts/sendGiftPage.dart';
 import 'package:openthebox/login.dart';
 import 'package:openthebox/theme.dart';
 
@@ -7,9 +10,8 @@ import 'package:openthebox/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
