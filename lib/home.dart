@@ -67,47 +67,66 @@ class _HomeState extends State<Home> {
                 ],
               ),
               const H(20),
-              const Text('Vos amis'),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue[100],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: const Text('Vos amis'),
+              ),
+              const Text('Cliquez sur l\'icône pour envoyer un cadeau 🎁'),
               if (friends != null)
                 ...friends!.map(
-                  (friend) => Row(
-                    children: [
-                      const Icon(Icons.person),
-                      const W(10),
-                      Text(friend.name),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SendGiftPage(from: from, to: friend.id)),
-                          );
-                        },
-                        icon: const Icon(Icons.send),
-                      ),
-                    ],
+                  (friend) => Card(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person),
+                        const W(10),
+                        Text(friend.name),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SendGiftPage(from: from, to: friend.id)),
+                            );
+                          },
+                          icon: const Icon(Icons.send),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               const H(10),
-              const Text('Suggestions:'),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue[100],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: const Text("Suggestion d'ami"),
+              ),
               if (suggestions != null)
                 ...suggestions!.map(
-                  (friend) => Row(
-                    children: [
-                      const Icon(Icons.person),
-                      const W(10),
-                      Text(friend.name),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddFriendPage(friend: friend.name)),
-                          );
-                        },
-                        icon: const Icon(Icons.add),
-                      ),
-                    ],
+                  (friend) => Card(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person),
+                        const W(10),
+                        Text(friend.name),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => AddFriendPage(friend: friend.name)),
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],
