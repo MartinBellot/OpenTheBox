@@ -1,6 +1,9 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 require('dotenv').config({
     path: './.env',
 });
@@ -9,8 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 const multer = require('multer');
-  
-const upload = multer({ storage: multer.memoryStorage()})
+
+const upload = multer({ storage: multer.memoryStorage() })
 
 const pool = new Pool({
     host: 'localhost',
@@ -22,8 +25,10 @@ const pool = new Pool({
 
 app.post('/users', async (req, res) => {
     const { name, password } = req.body;
+    console.log('do call api');
     try {
-        const result = await pool.query('INSERT INTO users (name, password) VALUES ($1, $2) RETURNING *', [name, password]);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const result = await pool.query('INSERT INTO users (name, password) VALUES ($1, $2) RETURNING *', [name, hashedPassword]);
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
@@ -45,9 +50,15 @@ app.post('/gifts', async (req, res) => {
 app.post('/signin', async (req, res) => {
     const { name, password } = req.body;
     try {
-        const result = await pool.query('SELECT * FROM users WHERE name = $1 AND password = $2', [name, password]);
+        const result = await pool.query('SELECT * FROM users WHERE name = $1', [name]);
         if (result.rows.length > 0) {
-            res.json(result.rows[0]);
+            const user = result.rows[0];
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (passwordMatch) {
+                res.json(user);
+            } else {
+                res.status(401).json({ error: 'Invalid password' });
+            }
         } else {
             res.status(401).json({ error: 'Invalid username or password' });
         }
@@ -86,11 +97,9 @@ app.post('/users/:userId/add/friends', async (req, res) => {
 });
 
 app.get('/users/:userId', async (req, res) => {
-    console.log('DO CALL');
     const { userId } = req.params;
     try {
         const result = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
-        console.log('result', result.rows[0]);
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
