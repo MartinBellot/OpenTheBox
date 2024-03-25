@@ -24,7 +24,7 @@ class _GiftPageState extends State<GiftPage> {
     super.initState();
     getUsername();
     _audioPlayer = AudioPlayer();
-    socket = IO.io('http://localhost:5000', <String, dynamic>{
+    socket = IO.io('http://185.142.53.141:5000', <String, dynamic>{
       'transports': ['websocket'],
     });
     socket.onConnect((_) {
@@ -59,8 +59,8 @@ class _GiftPageState extends State<GiftPage> {
       print("Image before parse: ${data['image']}");
       if (data['gift_to'] != username) return;
 
-      var imageUrl = 'http://localhost:8090/download/${data['image']}';
-      var musicUrl = 'http://localhost:8090/download/${data['musique']}';
+      var imageUrl = 'http://185.142.53.141:8090/download/${data['image']}';
+      var musicUrl = 'http://185.142.53.141:8090/download/${data['musique']}';
 
       setState(() {
         _giftReceived = true;

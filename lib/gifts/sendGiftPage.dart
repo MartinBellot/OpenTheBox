@@ -27,7 +27,7 @@ class _SendGiftPageState extends State<SendGiftPage> {
   @override
   void initState() {
     super.initState();
-    socket = IO.io('http://localhost:5000', <String, dynamic>{
+    socket = IO.io('http://185.142.53.141:5000', <String, dynamic>{
       'transports': ['websocket'],
     });
     socket.connect();
@@ -89,7 +89,7 @@ class _SendGiftPageState extends State<SendGiftPage> {
       var bytes = await pickedFile.readAsBytes();
 
       // Create a MultipartRequest
-      var request = http.MultipartRequest('POST', Uri.parse("http://0.0.0.0:8090/upload"));
+      var request = http.MultipartRequest('POST', Uri.parse("http://185.142.53.141:8090/upload"));
 
       // Get the file name
       var fileName = pickedFile.name;
@@ -118,7 +118,7 @@ class _SendGiftPageState extends State<SendGiftPage> {
       });
 
       var bytes = await pickedFile.readAsBytes();
-      var request = http.MultipartRequest('POST', Uri.parse("http://0.0.0.0:8090/upload"));
+      var request = http.MultipartRequest('POST', Uri.parse("http://185.142.53.141:8090/upload"));
       var fileName = pickedFile.name;
       music = fileName;
       request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: fileName, contentType: MediaType('audio', 'mpeg')));
