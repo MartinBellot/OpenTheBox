@@ -42,9 +42,8 @@ class _GiftPageState extends State<GiftPage> {
     super.dispose();
   }
 
-
   void getUsername() async {
-    print(this);  // Add this line
+    print(this); // Add this line
     final prefs = await SharedPreferences.getInstance();
     if (mounted) {
       setState(() {
@@ -55,7 +54,7 @@ class _GiftPageState extends State<GiftPage> {
 
   void _receiveGift(data) async {
     if (data != null && mounted) {
-      print("Received gift from ${data['gift_from']}, current_user: $username") ;
+      print("Received gift from ${data['gift_from']}, current_user: $username");
       print("Image before parse: ${data['image']}");
       if (data['gift_to'] != username) return;
 
@@ -72,7 +71,7 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   void _openGift() async {
-    if (!_giftReceived) return;  // Add this
+    if (!_giftReceived) return; // Add this
     setState(() {
       _giftOpened = true;
     });
@@ -94,67 +93,67 @@ class _GiftPageState extends State<GiftPage> {
         title: const Text('Recevoir un cadeau'),
       ),
       body: Center(
-        child: _giftReceived ? Stack(
-          alignment: Alignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (!_giftOpened) {
-                  _openGift();
-                }
-              },
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return ScaleTransition(
-                    scale: animation,
-                    child: child,
-                  );
-                },
-                child: _giftOpened
-                    ? CardWidget(giftData: giftData)
-                    : const Image(
-                        image: AssetImage('gift.png'),
-                        height: 200,
-                        width: 200,
-                      ),
-              ),
-            ),
-            IgnorePointer( 
-              child: CircularParticle(
-                key: UniqueKey(),
-                awayRadius: 80,
-                numberOfParticles: 100,
-                speedOfParticles: 2,
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                onTapAnimation: true,
-                particleColor: Colors.white.withAlpha(150),
-                awayAnimationDuration: const Duration(milliseconds: 10),
-                maxParticleSize: 8,
-                isRandSize: true,
-                isRandomColor: true,
-                randColorList: [
-                  Colors.red.withAlpha(210),
-                  Colors.white.withAlpha(210),
-                  Colors.yellow.withAlpha(210),
-                  Colors.green.withAlpha(210)
+        child: _giftReceived
+            ? Stack(
+                alignment: Alignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (!_giftOpened) {
+                        _openGift();
+                      }
+                    },
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return ScaleTransition(
+                          scale: animation,
+                          child: child,
+                        );
+                      },
+                      child: _giftOpened
+                          ? CardWidget(giftData: giftData)
+                          : const Image(
+                              image: AssetImage('assets/gift.png'),
+                              height: 200,
+                              width: 200,
+                            ),
+                    ),
+                  ),
+                  IgnorePointer(
+                    child: CircularParticle(
+                      key: UniqueKey(),
+                      awayRadius: 80,
+                      numberOfParticles: 100,
+                      speedOfParticles: 2,
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      onTapAnimation: true,
+                      particleColor: Colors.white.withAlpha(150),
+                      awayAnimationDuration: const Duration(milliseconds: 10),
+                      maxParticleSize: 8,
+                      isRandSize: true,
+                      isRandomColor: true,
+                      randColorList: [
+                        Colors.red.withAlpha(210),
+                        Colors.white.withAlpha(210),
+                        Colors.yellow.withAlpha(210),
+                        Colors.green.withAlpha(210)
+                      ],
+                      awayAnimationCurve: Curves.easeInOutBack,
+                      enableHover: true,
+                      hoverColor: Colors.white,
+                      hoverRadius: 90,
+                      connectDots: false,
+                    ),
+                  ),
                 ],
-                awayAnimationCurve: Curves.easeInOutBack,
-                enableHover: true,
-                hoverColor: Colors.white,
-                hoverRadius: 90,
-                connectDots: false,
-              ),
-            ),
-          ],
-        ) : Container(),
+              )
+            : Container(),
       ),
     );
   }
 }
-
-
 
 class CardWidget extends StatelessWidget {
   final Map<String, dynamic> giftData;
@@ -202,7 +201,7 @@ class CardWidget extends StatelessWidget {
               child: Card(
                 child: giftData['image'] != null
                     ? Image.network(giftData['image'])
-                    : Container(),  // Replace with a placeholder widget if you like
+                    : Container(), // Replace with a placeholder widget if you like
               ),
             ),
             const SizedBox(height: 8),
